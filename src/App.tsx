@@ -24,7 +24,7 @@ function App() {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white text-black p-8 rounded-2xl max-w-md w-full mx-4">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-2xl font-bold">Comece seu Teste Grátis</h3>
+          <h3 className="text-2xl font-bold">Comece aqui a sua jornada</h3>
           <button onClick={() => setShowTrialModal(false)}>
             <X className="w-6 h-6" />
           </button>
@@ -64,10 +64,10 @@ function App() {
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition-all"
           >
-            Começar Teste Grátis
+            Comece aqui a sua jornada
           </button>
           <p className="text-sm text-gray-500 text-center">
-            7 dias grátis, sem compromisso
+            Fale com nossos especialistas.
           </p>
         </form>
       </div>
