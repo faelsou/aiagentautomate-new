@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 import { api } from '../config/api';
 
-const SOCKET_URL = process.env.VITE_SOCKET_URL || 'http://localhost:8081';
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:8081';
 
 export class ChatService {
   private socket;
