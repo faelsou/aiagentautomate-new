@@ -7,7 +7,7 @@ function App() {
 
   const handleWhatsAppClick = () => {
     const message = "Olá! Gostaria de saber mais sobre a automação de agentes de IA para vendas.";
-    const phoneNumber = "5511999999999"; // Replace with actual business phone number
+    const phoneNumber = "5511952313944"; // Replace with actual business phone number
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
@@ -15,7 +15,7 @@ function App() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const message = `Olá! Gostaria de começar o teste grátis da AIAgent Automate.\n\nDados da empresa:\nEmpresa: ${formData.get('company')}\nEmail: ${formData.get('email')}\nTelefone: ${formData.get('phone')}`;
-    const phoneNumber = "5511999999999"; // Replace with actual business phone number
+    const phoneNumber = "5511952313944"; // Replace with actual business phone number
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
     setShowTrialModal(false);
   };
