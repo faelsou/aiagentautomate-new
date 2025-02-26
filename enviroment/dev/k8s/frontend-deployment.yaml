@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aiagent-frontend
+  labels:
+    app: aiagent-frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: aiagent-frontend
+  template:
+    metadata:
+      labels:
+        app: aiagent-frontend
+    spec:
+      containers:
+      - name: aiagent-frontend
+        image: aiagent-automate-frontend:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
