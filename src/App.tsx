@@ -49,7 +49,7 @@ const App = () => {
             <form className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Nome da Empresa</label>
-                <input type="text" name="company" className="w-full px-4 py-2 border border-gray-300 rounded-lg" required />
+                <input type="text" name="company_name" className="w-full px-4 py-2 border border-gray-300 rounded-lg" required />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Email Corporativo</label>
