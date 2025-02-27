@@ -1,6 +1,5 @@
 // src/App.tsx
-import React, { useState } from 'react';
-import { supabase } from './services/supabase';
+import React, { useState, useEffect } from 'react';
 import { MessageCircle, ArrowRight, X, CheckCircle2, Brain } from 'lucide-react';
 import { Chat } from './components/Chat';
 import { createClient } from '@supabase/supabase-js';
@@ -11,8 +10,12 @@ const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const App = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [showTrialModal, setShowTrialModal] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  // Exemplo de uso do Supabase
   useEffect(() => {
-    // Exemplo de uso do Supabase
     async function fetchData() {
       const { data, error } = await supabase.from('your-table').select('*');
       console.log(data, error);
@@ -21,20 +24,16 @@ const App = () => {
     fetchData();
   }, []);
 
-  return <div>App</div>;
-};
+  // Função para obter o usuário
+  const getUser = async () => {
+    const { data, error } = await supabase.auth.getUser();
+    console.log(data, error);
+  };
 
-async function getUser() {
-  const { data, error } = await supabase.auth.getUser();
-  console.log(data, error);
-}
-
-getUser();
-
-function App() {
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [showTrialModal, setShowTrialModal] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  // Chama a função getUser ao montar o componente
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <div className="min-h-screen bg-black text-white">
