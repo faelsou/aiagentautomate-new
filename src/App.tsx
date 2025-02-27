@@ -11,7 +11,7 @@ function App() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const handleWhatsAppClick = () => {
-    const message = "Olá! Gostaria de começar a Jornada com a AIAgent Automate.";
+    const message = "Olá! Gostaria de saber mais sobre a automação de agentes de IA para vendas.";
     const phoneNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
@@ -32,7 +32,7 @@ function App() {
       setSubmitStatus('success');
       
       // Prepare WhatsApp message
-      const message = `Olá! Gostaria de começar a Jornada com a AIAgent Automate.\n\nDados da empresa:\nEmpresa: ${trialData.company_name}\nEmail: ${trialData.email}\nTelefone: ${trialData.phone}`;
+      const message = `Olá! Gostaria de começar a Jornada com a da AIAgent Automate.\n\nDados da empresa:\nEmpresa: ${trialData.company_name}\nEmail: ${trialData.email}\nTelefone: ${trialData.phone}`;
       const phoneNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
       
       // Delay to show success message before redirecting
@@ -51,7 +51,7 @@ function App() {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white text-black p-6 md:p-8 rounded-2xl w-full max-w-md mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-xl md:text-2xl font-bold">Comece a jornada</h3>
+          <h3 className="text-xl md:text-2xl font-bold">Comece seu Teste Grátis</h3>
           <button 
             onClick={() => setShowTrialModal(false)} 
             className="hover:opacity-80"
@@ -111,7 +111,7 @@ function App() {
             <span>
               {submitStatus === 'loading' ? 'Processando...' 
                 : submitStatus === 'success' ? 'Sucesso!'
-                : 'Comece a jornada'}
+                : 'Começar Teste Grátis'}
             </span>
           </button>
           {submitStatus === 'error' && (
@@ -120,7 +120,7 @@ function App() {
             </p>
           )}
           <p className="text-sm text-gray-500 text-center">
-            Fale com nossos especialistas.
+            7 dias grátis, sem compromisso
           </p>
         </form>
       </div>
