@@ -3,6 +3,26 @@ import React, { useState } from 'react';
 import { supabase } from './services/supabase';
 import { MessageCircle, ArrowRight, X, CheckCircle2, Brain } from 'lucide-react';
 import { Chat } from './components/Chat';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+const App = () => {
+  useEffect(() => {
+    // Exemplo de uso do Supabase
+    async function fetchData() {
+      const { data, error } = await supabase.from('your-table').select('*');
+      console.log(data, error);
+    }
+
+    fetchData();
+  }, []);
+
+  return <div>App</div>;
+};
 
 async function getUser() {
   const { data, error } = await supabase.auth.getUser();
