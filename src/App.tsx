@@ -17,7 +17,7 @@ const App = () => {
   // Exemplo de uso do Supabase
   useEffect(() => {
     async function fetchData() {
-      const { data, error } = await supabase.from('your-table').select('*');
+      const { data, error } = await supabase.from('trial_requests').select('*');
       console.log(data, error);
     }
 
