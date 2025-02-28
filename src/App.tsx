@@ -24,7 +24,7 @@ function App() {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white text-black p-8 rounded-2xl max-w-md w-full mx-4">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-2xl font-bold">Inicie sua jornada com a AIAgent Automate</h3>
+          <h3 className="text-2xl font-bold">11nicie sua jornada com a AIAgent Automate</h3>
           <button onClick={() => setShowTrialModal(false)}>
             <X className="w-6 h-6" />
           </button>
