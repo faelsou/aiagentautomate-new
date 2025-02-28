@@ -43,7 +43,7 @@ export class ChatService {
     }
   }
 
-  onMessage(callback: (message: any) => void) {
+  onMessage(callback: (message: string) => void) {
     this.socket.on('message', callback);
   }
 
