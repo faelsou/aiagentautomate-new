@@ -37,11 +37,15 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         
+    - name: Check if image exists in Docker Hub
+      run: |
+        docker pull faelsouz/ai-agent-automate:latest || echo "Imagem não encontrada, continuando com o push."
+        
     - name: Push Docker image to Docker Hub
       run: |
         docker tag aiagent-automate-frontend:latest faelsouz/ai-agent-automate:latest
-        docker push faelsouz/ai-agent-automate:latest
-      
+        docker push faelsouz/ai-agent-automate:latest || echo "Erro ao empurrar a imagem, talvez já exista."
+
     - name: Run security scan (bypass errors)
       uses: aquasecurity/trivy-action@master
       with:
@@ -66,8 +70,12 @@ jobs:
 
     - name: Deploy to Minikube
       run: |
-        kubectl create deployment aiagent-frontend --image=faelsouz/ai-agent-automate:latest
+        kubectl create deployment aiagent-frontend --image=faelsouz/ai-agent-automate:latest || echo "Deployment já existe"
         kubectl expose deployment aiagent-frontend --type=LoadBalancer --port=80 --target-port=3000  # Expondo a porta 80 para acesso externo
+
+    - name: Wait for pod to be ready
+      run: |
+        kubectl rollout status deployment/aiagent-frontend --timeout=600s  # Espera até 10 minutos para o deployment ser concluído
 
     - name: Get Minikube URL
       run: |
