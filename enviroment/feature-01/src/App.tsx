@@ -6,7 +6,7 @@ function App() {
   const [showTrialModal, setShowTrialModal] = useState(false);
 
   const handleWhatsAppClick = () => {
-    const message = "Olá! Gostaria de saber mais sobre a automação de agentes de IA para vendas.";
+    const message = "Olá! Gostaria de iniciar a jornada com AIAgent Automate.";
     const phoneNumber = "5511952313944"; // Replace with actual business phone number
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
@@ -14,8 +14,8 @@ function App() {
   const handleTrialSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const message = `Olá! Gostaria de começar o teste grátis da AIAgent Automate.\n\nDados da empresa:\nEmpresa: ${formData.get('company')}\nEmail: ${formData.get('email')}\nTelefone: ${formData.get('phone')}`;
-    const phoneNumber = "5511999999999"; // Replace with actual business phone number
+    const message = `Olá! Gostaria de iniciar a jornada com AIAgent Automate.\n\nDados da empresa:\nEmpresa: ${formData.get('company')}\nEmail: ${formData.get('email')}\nTelefone: ${formData.get('phone')}`;
+    const phoneNumber = "5511952313944"; // Replace with actual business phone number
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
     setShowTrialModal(false);
   };
@@ -24,7 +24,7 @@ function App() {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white text-black p-8 rounded-2xl max-w-md w-full mx-4">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-2xl font-bold">Comece seu Teste Grátis</h3>
+          <h3 className="text-2xl font-bold">Inicie sua jornada com a AIAgent Automate</h3>
           <button onClick={() => setShowTrialModal(false)}>
             <X className="w-6 h-6" />
           </button>
@@ -64,10 +64,10 @@ function App() {
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition-all"
           >
-            Começar Teste Grátis
+            Comece a jornada
           </button>
           <p className="text-sm text-gray-500 text-center">
-            7 dias grátis, sem compromisso
+            Fale com um especialista para tirar suas dúvidas.
           </p>
         </form>
       </div>
@@ -121,7 +121,7 @@ function App() {
           <h2 className="text-4xl font-bold text-center mb-16">Quem Somos</h2>
           <div className="max-w-4xl mx-auto">
             <p className="text-xl text-gray-300 mb-8">
-              Somos a AIAgent Automate, especialistas em automação de agentes de IA para transformar a maneira como sua empresa se comunica, vende e atende seus clientes. Nossa tecnologia de ponta permite a criação de agentes inteligentes que automatizam processos, qualificam leads e melhoram a experiência do cliente em tempo real.
+              Somos a AIAgent Automate, especialistas em automação de agentes de IA para transformar a maneira como sua empresa se comunica, vende e atende seus clientes. Nossa tecnologia de ponta permite a criação de agentes inteligentes que automatizam processos e melhoram a experiência do cliente em tempo real.
             </p>
             <p className="text-xl text-gray-300 mb-8">
               Com IA avançada, nossos agentes simulam interações humanas naturais, tornando seu atendimento mais ágil, eficiente e escalável. Aumente sua taxa de conversão, reduza custos operacionais e potencialize suas vendas com automação inteligente.
@@ -175,8 +175,8 @@ function App() {
               <p className="text-gray-300">Métricas detalhadas e insights acionáveis para otimização contínua do seu atendimento.</p>
             </div>
             <div className="bg-black/30 p-8 rounded-2xl backdrop-blur-sm">
-              <h3 className="text-2xl font-bold mb-4">Treinamento e Suporte</h3>
-              <p className="text-gray-300">Capacitação completa da sua equipe e suporte técnico especializado para máximo aproveitamento.</p>
+              <h3 className="text-2xl font-bold mb-4">Suporte</h3>
+              <p className="text-gray-300">Suporte técnico especializado para máximo aproveitamento.</p>
             </div>
           </div>
         </div>
