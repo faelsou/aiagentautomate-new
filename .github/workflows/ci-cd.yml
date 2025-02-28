@@ -40,3 +40,24 @@ jobs:
         ignore-unfixed: true
         severity: 'CRITICAL,HIGH'
       continue-on-error: true  # Se encontrar vulnerabilidades, a esteira continua
+
+    - name: Set up Minikube
+      run: |
+        curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        sudo install minikube /usr/local/bin/
+        curl -LO https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl
+        sudo install kubectl /usr/local/bin/
+        minikube start --driver=docker  # Use o driver Docker se preferir rodar no mesmo host
+
+    - name: Set up kubectl
+      run: |
+        kubectl config use-context minikube
+
+    - name: Deploy to Minikube
+      run: |
+        kubectl create deployment aiagent-frontend --image=aiagent-automate-frontend:latest
+        kubectl expose deployment aiagent-frontend --type=LoadBalancer --port=80 --target-port=3000  # Expondo a porta 80 para acesso externo
+
+    - name: Get Minikube URL
+      run: |
+        minikube service aiagent-frontend --url
