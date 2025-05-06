@@ -12,8 +12,12 @@
     "docker:run": "docker run -p 3000:3000 aiagent-automate-frontend"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
     "axios": "^1.6.7",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "lucide-react": "^0.344.0",
+    "node-fetch": "^2.7.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-query": "^3.39.3",
@@ -39,5 +43,10 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.3.0",
     "vite": "^5.4.2"
-  }
+  },
+  "main": "eslint.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

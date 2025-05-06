@@ -1,0 +1,120 @@
+{
+    "nodes": [
+        {
+            "parameters": {
+                "path": "whatsapp",
+                "method": "POST",
+                "responseMode": "onReceived"
+            },
+            "id": "whatsapp-trigger",
+            "name": "WhatsApp Trigger",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "return [\n  {\n    json: {\n      receivedAt: new Date().toISOString()\n    }\n  }\n];"
+            },
+            "id": "date-time1",
+            "name": "Date & Time1",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 1,
+            "position": [
+                300,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "return [\n  {\n    json: {\n      originalBody: $json.body,\n      from: $json.from\n    }\n  }\n];"
+            },
+            "id": "code1",
+            "name": "Code1",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 1,
+            "position": [
+                500,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "return [\n  {\n    json: {\n      sessionId: $json.from,\n      input: $json.originalBody\n    }\n  }\n];"
+            },
+            "id": "set-session-and-input",
+            "name": "Set Session & Input",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 1,
+            "position": [
+                700,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "sessionId": "sessionId",
+                "inputKey": "input",
+                "memoryKey": "chat_history",
+                "k": 5
+            },
+            "id": "simple-memory",
+            "name": "Simple Memory",
+            "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+            "typeVersion": 1,
+            "position": [
+                900,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "WhatsApp Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Date & Time1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Date & Time1": {
+            "main": [
+                [
+                    {
+                        "node": "Code1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code1": {
+            "main": [
+                [
+                    {
+                        "node": "Set Session & Input",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set Session & Input": {
+            "main": [
+                [
+                    {
+                        "node": "Simple Memory",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}
