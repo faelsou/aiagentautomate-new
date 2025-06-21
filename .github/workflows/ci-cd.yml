@@ -7,76 +7,61 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
         cache: 'npm'
-        
+
     - name: Install dependencies
       run: npm ci
-      
+
     - name: Run linting (bypass errors)
-      run: npm run lint || true  # Se falhar, continua a pipeline
-      
+      run: npm run lint || true
+
     - name: Build application
       run: npm run build
-      
+
+    - name: Extract image tag from compose file
+      id: tag
+      run: |
+        TAG=$(grep -v '^#' docker-compose.yml | grep 'image:' | head -n1 | awk -F ':' '{print $3}')
+        echo "IMAGE_TAG=$TAG" >> $GITHUB_ENV
+
     - name: Build Docker image
-      run: docker build -t aiagent-automate-frontend .
-      
+      run: docker build -t faelsouz/aiagentautomate:${{ env.IMAGE_TAG }} .
+
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        
-    - name: Check if image exists in Docker Hub
-      run: |
-        docker pull faelsouz/ai-agent-automate:latest || echo "Imagem não encontrada, continuando com o push."
-        
+
     - name: Push Docker image to Docker Hub
-      run: |
-        docker tag aiagent-automate-frontend:latest faelsouz/ai-agent-automate:latest
-        docker push faelsouz/ai-agent-automate:latest || echo "Erro ao empurrar a imagem, talvez já exista."
+      run: docker push faelsouz/aiagentautomate:${{ env.IMAGE_TAG }}
 
     - name: Run security scan (bypass errors)
       uses: aquasecurity/trivy-action@master
       with:
-        image-ref: 'aiagent-automate-frontend:latest'
+        image-ref: 'faelsouz/aiagentautomate:${{ env.IMAGE_TAG }}'
         format: 'table'
         exit-code: '1'
         ignore-unfixed: true
         severity: 'CRITICAL,HIGH'
-      continue-on-error: true  # Se encontrar vulnerabilidades, a esteira continua
+      continue-on-error: true
 
-    - name: Set up Minikube
-      run: |
-        curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-        sudo install minikube /usr/local/bin/
-        curl -LO https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl
-        sudo install kubectl /usr/local/bin/
-        minikube start --driver=docker  # Use o driver Docker se preferir rodar no mesmo host
-
-    - name: Set up kubectl
-      run: |
-        kubectl config use-context minikube
-
-    - name: Deploy to Minikube
-      run: |
-        kubectl create deployment aiagent-frontend --image=faelsouz/ai-agent-automate:latest || echo "Deployment já existe"
-        kubectl expose deployment aiagent-frontend --type=LoadBalancer --port=80 --target-port=3000  # Expondo a porta 80 para acesso externo
-
-    - name: Wait for pod to be ready
-      run: |
-        kubectl rollout status deployment/aiagent-frontend --timeout=600s  # Espera até 10 minutos para o deployment ser concluído
-
-    - name: Get Minikube URL
-      run: |
-        minikube service aiagent-frontend --url
+    - name: Deploy using Docker Swarm
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          docker pull faelsouz/aiagentautomate:${{ env.IMAGE_TAG }}
+          docker stack deploy -c docker-compose.yml aiagent
