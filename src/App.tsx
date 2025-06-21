@@ -159,7 +159,7 @@ function App() {
 
   const handleWhatsAppClick = () => {
     const message = "Olá! Gostaria de iniciar a jornada com AIAgent Automate.";
-    const phoneNumber = "5511986808298"; // Replace with actual business phone number
+    const phoneNumber = "5511945237617"; // Replace with actual business phone number
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
