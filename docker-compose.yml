@@ -1,0 +1,51 @@
+#version: '3.8'
+#
+#services:
+#  site:
+#    image: faelsouz/aiagentautomate:v1.0.3
+#    deploy:
+#      replicas: 1
+#      restart_policy:
+#        condition: on-failure
+#      labels:
+#        - "traefik.enable=true"
+#        - "traefik.http.routers.aiagentautomate.rule=Host(`aiagentautomate.com.br`, `www.aiagentautomate.com.br`)"
+#        - "traefik.http.routers.aiagentautomate.entrypoints=websecure"
+#        - "traefik.http.routers.aiagentautomate.tls.certresolver=letsencryptresolver"
+#        - "traefik.http.services.aiagentautomate.loadbalancer.server.port=80"
+#    networks:
+#      - network_public
+#
+#networks:
+#  network_public:
+#    external: true
+version: '3.8'
+
+services:
+  site:
+    image: faelsouz/aiagentautomate:v1.0.5
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+
+        # Regra para acessar pelos dois domínios (sem erro de sintaxe)
+        - "traefik.http.routers.aiagentautomate.rule=Host(`aiagentautomate.com.br`) || Host(`www.aiagentautomate.com.br`)"
+
+        # Entrypoint seguro (HTTPS)
+        - "traefik.http.routers.aiagentautomate.entrypoints=websecure"
+
+        # Resolver do TLS (Let's Encrypt)
+        - "traefik.http.routers.aiagentautomate.tls.certresolver=letsencryptresolver"
+
+        # Porta interna exposta no container (nginx serve na 80)
+        - "traefik.http.services.aiagentautomate.loadbalancer.server.port=80"
+
+    networks:
+      - network_public
+
+networks:
+  network_public:
+    external: true
