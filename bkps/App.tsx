@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MessageCircle, ArrowRight, BarChart3, Users, Zap, Brain, X, CheckCircle2 } from 'lucide-react';
-import { supabase } from './src/lib/supabaseClient';
+//import { supabase } from './src/lib/supabaseClient';
 
 function normalizePhone(phone) {
   let digits = phone.replace(/\D/g, '');

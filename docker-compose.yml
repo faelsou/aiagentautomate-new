@@ -23,7 +23,7 @@ version: '3.8'
 
 services:
   site:
-    image: faelsouz/aiagentautomate:v1.0.6
+    image: faelsouz/aiagentautomate:v1.0.7
     deploy:
       replicas: 1
       restart_policy:
