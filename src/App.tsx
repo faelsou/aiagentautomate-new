@@ -1,23 +1,7 @@
-import React, { useState } from 'react';
-import { MessageCircle, ArrowRight, Users, Zap, Brain, X, CheckCircle2 } from 'lucide-react';
-import { supabase } from './lib/supabaseClient'; 
-
-function normalizePhone(phone: string): string {
-  let digits = phone.replace(/\D/g, '');
-  while (digits.startsWith('55') && digits.length > 13) {
-    digits = digits.substring(2);
-  }
-  if (!digits.startsWith('55')) {
-    digits = '55' + digits;
-  }
-  if (digits.length > 13) {
-    digits = digits.slice(-13);
-  }
-  return digits;
-}
+import React from 'react';
+import { MessageCircle, ArrowRight, Users, Zap, Brain, CheckCircle2 } from 'lucide-react';
 
 function App() {
-    const [showTrialModal, setShowTrialModal] = useState(false);
 
   const handleWhatsAppClick = () => {
     const message = "Olá! Gostaria de iniciar a jornada com AIAgent Automate!.";
@@ -25,141 +9,8 @@ function App() {
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
-  const handleTrialSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-
-  // Extrair dados do formulário
-  const formData = new FormData(e.currentTarget);
-  const name = formData.get('name') as string;
-  const company = formData.get('company') as string;
-  const email = formData.get('email') as string;
-  const phoneRaw = formData.get('phone') as string;
-  const phone = normalizePhone(phoneRaw); // Função de normalização que você já deve ter
-
-  try {
-    // 1. Salvar lead no Supabase
-    const { error } = await supabase
-      .from('dados_cliente')
-      .insert([
-        {
-          name,
-          company,
-          email,
-          phone, // já normalizado
-          status: 'novo'
-        }
-      ]);
-    if (error) {
-      console.error('Erro ao inserir no Supabase:', error.message);
-      alert('Erro ao enviar os dados. Tente novamente.');
-      return;
-    }
-
-    // 2. Enviar dados para automação no n8n
-    const response = await fetch('https://n8n.aiagentautomate.com.br/webhook/dados_cliente', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, company, email, phone })
-    });
-    if (!response.ok) {
-      throw new Error(`Erro ao enviar para o n8n: ${response.statusText}`);
-    }
-
-    // 3. (Opcional) Enviar para API local, caso precise de um backend intermediário
-    // await fetch('/api/send-to-n8n', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ name, company, email, phone }),
-    // });
-
-    // 4. Abrir WhatsApp para contato
-    //const message = "Olá! Gostaria de iniciar a jornada com AIAgent Automate.";
-    //const phoneNumber = "5511986808298";
-    //window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
-
-    // 5. Feedback para o usuário
-    alert('Informações enviadas com sucesso! Em breve entraremos em contato.');
-    setShowTrialModal(false);
-
-  } catch (err) {
-    console.error('Erro durante envio de dados:', err);
-    alert('Erro ao enviar as informações. Tente novamente mais tarde.');
-  }
-};
-
-  const TrialModal = () => (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white text-black p-8 rounded-2xl max-w-md w-full mx-4">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-2xl font-bold">Inicie sua jornada com a AIAgent Automate</h3>
-          <button onClick={() => setShowTrialModal(false)}>
-            <X className="w-6 h-6" />
-          </button>
-        </div>
-        <form className="space-y-4" onSubmit={handleTrialSubmit}>
-          <div>
-            <label className="block text-sm font-medium mb-1">Nome</label>
-            <input
-              type="text"
-              name="name"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
-              placeholder="Seu Nome"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Nome da Empresa</label>
-            <input
-              type="text"
-              name="company"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
-              placeholder="Sua Empresa"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Email Corporativo</label>
-            <input
-              type="email"
-              name="email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
-              placeholder="seu@email.com"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Telefone</label>
-            <input
-              type="tel"
-              name="phone"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-600"
-              placeholder="(11) 99999-9999"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition-all"
-          >
-            Comece a jornada
-          </button>
-          <p className="text-sm text-gray-500 text-center">
-            Fale com um especialista para tirar suas dúvidas.
-          </p>
-        </form>
-
-      </div>
-    </div>
-  );
-
   return (
     <div className="min-h-screen bg-black text-white">
-      {showTrialModal && <TrialModal />}
-
       {/* Hero Section */}
       <header className="relative overflow-hidden bg-gradient-to-r from-blue-900 via-purple-900 to-black">
         <nav className="container mx-auto px-6 py-4">
@@ -187,7 +38,7 @@ function App() {
               Transforme seu time de vendas com agentes de IA que nunca param de gerar leads
             </p>
             <button
-              onClick={() => setShowTrialModal(true)}
+              onClick={() => window.open('https://n8n.aiagentautomate.com.br/webhook/responde-cliente', '_blank')}
               className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-bold text-lg transition-all transform hover:scale-105 flex items-center space-x-2"
             >
               <span>Experimente Agora</span>
